@@ -16,3 +16,7 @@ Heisenbug is a public place to report bugs, confirm them on your own device and 
 - `brand/BRAND.md`: logo, wordmark, colours, tagline, Powered by, trademark notes
 - `brand/svg`, `brand/png`, `brand/favicon`: the brand pack (v1)
 - `BRAND-USE.md`: how the brand files may be used
+
+## License
+
+Code and tokens are MIT (`LICENSE`). Files in `brand/` are not licensed for reuse (see `BRAND-USE.md`). Third-party notices: `THIRD-PARTY-NOTICES.md`.

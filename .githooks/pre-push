@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Blocks pushes to main and any non-fast-forward (force) push. See AGENTS.md.
+set -u
+
+zero="0000000000000000000000000000000000000000"
+
+fail() {
+  echo "pre-push: $1" >&2
+  exit 1
+}
+
+# stdin lines: <local ref> <local sha> <remote ref> <remote sha>
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ -z "${remote_ref:-}" ]; then
+    continue
+  fi
+
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    fail "pushing to main is not allowed; push a feature branch and open a pull request"
+  fi
+
+  # Branch deletion or a new remote ref cannot be a force push.
+  if [[ "$local_sha" =~ ^0+$ ]] || [[ "$remote_sha" =~ ^0+$ ]] || [ "$remote_sha" = "$zero" ]; then
+    continue
+  fi
+
+  if ! git cat-file -e "${remote_sha}^{commit}" 2>/dev/null; then
+    fail "cannot verify that the push to $remote_ref is a fast-forward (remote commit unknown locally); fetch first"
+  fi
+
+  if ! git merge-base --is-ancestor "${remote_sha}^{commit}" "${local_sha}^{commit}" 2>/dev/null; then
+    fail "non-fast-forward (force) push to $remote_ref is not allowed"
+  fi
+done
+
+exit 0
