@@ -1,0 +1,27 @@
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Logs
+*.log
+
+# Node
+node_modules/
+.pnpm-store/
+dist/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
