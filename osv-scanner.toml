@@ -1,0 +1,4 @@
+[[IgnoredVulns]]
+id = "GHSA-mrhx-c7xc-m3w5"
+ignoreUntil = 2026-12-05
+reason = "Oversized attacker-controlled validation arrays can exhaust Zod memory; dev-only @google/design.md@0.4.0 only parses our own DESIGN.md, and neither the linter nor Zod is shipped or a production dependency; re-check upstream by 2026-12-05."
