@@ -1,0 +1,49 @@
+{
+  "name": "@heisenbughq/design",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Heisenbug theme tokens and canonical UI standards.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heisenbug-hq/heisenbug-design.git"
+  },
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": "26.x"
+  },
+  "files": [
+    "dist/",
+    "bin/",
+    "DESIGN.md",
+    "docs/ui-standards.md",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md"
+  ],
+  "exports": {
+    "./tokens.css": "./dist/tokens.css",
+    "./theme.css": "./dist/theme.css"
+  },
+  "bin": {
+    "heisenbug-design-sync": "bin/sync.mjs",
+    "heisenbug-design-check": "bin/check.mjs"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "contrast": "node tools/contrast.mjs",
+    "lint:design": "npx @google/design.md@0.4.0 lint DESIGN.md",
+    "drift": "node tools/drift.mjs",
+    "guards": "node tools/guards.mjs",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "check": "prettier --check . && pnpm build && pnpm contrast && pnpm lint:design && pnpm drift && pnpm guards && pnpm test",
+    "prepack": "pnpm build"
+  },
+  "devDependencies": {
+    "@google/design.md": "0.4.0",
+    "prettier": "3.9.10",
+    "vitest": "5.1.0",
+    "yaml": "2.9.1"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+pnpm-lock.yaml
+.release-please-manifest.json
+CHANGELOG.md
+# Canonical prose and existing repo documents retain their layout.
+**/*.md
+brand/
+.githooks/
