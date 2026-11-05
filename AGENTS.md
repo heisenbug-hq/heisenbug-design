@@ -4,7 +4,7 @@ Source of the tokens, themes, icon pack, brand files, `DESIGN.md` and the long U
 
 ## Hard rules
 - Tokens change only here. Other repos receive them by package update and `pnpm design:sync`.
-- Any colour change must pass the contrast script (text 4.5:1, status colours 4.5:1, UI borders 3:1) in both themes. Run `pnpm check`.
+- Any colour change must pass the contrast script (text 4.5:1, status colours 4.5:1 on ground and 3:1 on raised and selected (shapes only, never text), UI borders 3:1) in both themes. Run `pnpm check`.
 - The icon set is closed (Lucide v1.66.0, 67 icons). Adding one needs its Lucide name and a reason in the pull request, and a manifest update.
 - Status shapes are drawn here; six exist; a seventh needs a design change.
 - Run `npx @google/design.md lint DESIGN.md` (pinned) in CI.

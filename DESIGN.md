@@ -92,6 +92,8 @@ Status colours (all at least 4.8:1 on their ground): open red, in progress amber
 
 Theme behaviour: the marketing landing page is dark only with no switch. In the app and docs the choices are Dark (default), Light and System, stored in the cookie `hb-theme` (`dark`, `light`, `system`; one year) so the server renders the right theme on the first response; for `system` a tiny inline script in `<head>` sets `data-theme` before first paint. System is something the user picks, never the default. The SDK reporter follows the host app's theme. Link-preview images are dark.
 
+Status colours are used only for non-text status shapes with a text label: they must meet 4.5:1 against ground (house standard) and 3:1 against raised and selected (WCAG 1.4.11); status colours are never text colours, and red text uses the red-text tokens.
+
 Both themes must pass the same contrast checks.
 
 ## Typography

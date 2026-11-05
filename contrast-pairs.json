@@ -1,0 +1,148 @@
+{
+  "notes": [
+    "Hairline is decorative and excluded.",
+    "Status colours are non-text shapes with text labels, never text: 4.5:1 on ground is the house standard; 3:1 on raised and selected follows WCAG 1.4.11. Red text uses red-text tokens."
+  ],
+  "pairs": [
+    {
+      "foreground": "text",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text",
+      "background": "raised",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text",
+      "background": "selected",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text-2",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text-2",
+      "background": "raised",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text-2",
+      "background": "selected",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text-3",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text-3",
+      "background": "raised",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text-3",
+      "background": "selected",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "red-text",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "red-text",
+      "background": "raised",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "red-text",
+      "background": "selected",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "status-open",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "status-open",
+      "background": "raised",
+      "minimum": 3
+    },
+    {
+      "foreground": "status-open",
+      "background": "selected",
+      "minimum": 3
+    },
+    {
+      "foreground": "status-in-progress",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "status-in-progress",
+      "background": "raised",
+      "minimum": 3
+    },
+    {
+      "foreground": "status-in-progress",
+      "background": "selected",
+      "minimum": 3
+    },
+    {
+      "foreground": "status-fixed",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "status-fixed",
+      "background": "raised",
+      "minimum": 3
+    },
+    {
+      "foreground": "status-fixed",
+      "background": "selected",
+      "minimum": 3
+    },
+    {
+      "foreground": "status-neutral",
+      "background": "ground",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "status-neutral",
+      "background": "raised",
+      "minimum": 3
+    },
+    {
+      "foreground": "status-neutral",
+      "background": "selected",
+      "minimum": 3
+    },
+    {
+      "foreground": "control-border",
+      "background": "ground",
+      "minimum": 3
+    },
+    {
+      "foreground": "control-border",
+      "background": "raised",
+      "minimum": 3
+    },
+    {
+      "foreground": "primary-button-label",
+      "background": "primary-button",
+      "minimum": 4.5
+    },
+    {
+      "foreground": "badge-muted",
+      "background": "ground",
+      "minimum": 4.5
+    }
+  ]
+}
