@@ -1,13 +1,15 @@
 {
   "name": "@heisenbughq/design",
   "version": "0.0.0",
-  "private": true,
   "type": "module",
   "description": "Heisenbug theme tokens and canonical UI standards.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/heisenbug-hq/heisenbug-design.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "packageManager": "pnpm@12.16.1",
   "engines": {
@@ -16,6 +18,7 @@
   "files": [
     "dist/",
     "bin/",
+    "icons/",
     "DESIGN.md",
     "docs/ui-standards.md",
     "LICENSE",
@@ -23,7 +26,13 @@
   ],
   "exports": {
     "./tokens.css": "./dist/tokens.css",
-    "./theme.css": "./dist/theme.css"
+    "./theme.css": "./dist/theme.css",
+    "./icons/sprite.svg": "./icons/sprite.svg",
+    "./icons/manifest.json": "./icons/manifest.json",
+    "./icons/icon.mjs": "./icons/icon.mjs",
+    "./icons/*.svg": "./icons/icons/*.svg",
+    "./status/*.svg": "./icons/status/*.svg",
+    "./package.json": "./package.json"
   },
   "bin": {
     "heisenbug-design-sync": "bin/sync.mjs",
@@ -35,13 +44,15 @@
     "lint:design": "npx @google/design.md@0.4.0 lint DESIGN.md",
     "drift": "node tools/drift.mjs",
     "guards": "node tools/guards.mjs",
+    "icons": "node tools/icons.mjs",
     "test": "vitest run",
     "format": "prettier --write .",
-    "check": "prettier --check . && pnpm build && pnpm contrast && pnpm lint:design && pnpm drift && pnpm guards && pnpm test",
+    "check": "prettier --check . && pnpm build && pnpm contrast && pnpm lint:design && pnpm drift && pnpm guards && pnpm icons && pnpm test",
     "prepack": "pnpm build"
   },
   "devDependencies": {
     "@google/design.md": "0.4.0",
+    "@xmldom/xmldom": "0.9.12",
     "prettier": "3.9.10",
     "vitest": "5.1.0",
     "yaml": "2.9.1"

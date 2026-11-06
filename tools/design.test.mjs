@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { readFile, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { readFile, mkdtemp, rm, writeFile, cp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,6 +9,7 @@ import { contrast, checkPairs } from "./contrast.mjs";
 import { checkDrift } from "./drift.mjs";
 import { inspect } from "./guards.mjs";
 import { marker } from "../bin/documents.mjs";
+import { checkIcons, ICON_COUNT, GLYPH_COUNT } from "./icons.mjs";
 const source = await readFile(new URL("../DESIGN.md", import.meta.url), "utf8");
 const tokens = frontMatter(source);
 const clone = () => structuredClone(tokens);
@@ -166,5 +167,85 @@ describe("consumer commands", () => {
     expect(
       (await readFile(join(root, "DESIGN.md"), "utf8")).split(marker),
     ).toHaveLength(2);
+  });
+});
+describe("icon pack", () => {
+  const pack = fileURLToPath(new URL("../icons/", import.meta.url));
+  const copy = async () => {
+    const root = await mkdtemp(join(tmpdir(), "hb-icons-"));
+    folders.push(root);
+    await cp(pack, root, { recursive: true });
+    return root;
+  };
+  const edit = async (root, path, change) =>
+    writeFile(
+      join(root, path),
+      change(await readFile(join(root, path), "utf8")),
+    );
+  it("matches the manifest and uses currentColor only", async () => {
+    expect(ICON_COUNT).toBe(67);
+    expect(GLYPH_COUNT).toBe(6);
+    expect(await checkIcons(pack)).toEqual([]);
+  });
+  it("rejects a missing icon and an icon the manifest does not name", async () => {
+    const root = await copy();
+    await rm(join(root, "icons/bug.svg"));
+    await writeFile(join(root, "icons/extra.svg"), "<svg/>");
+    const errors = await checkIcons(root);
+    expect(errors).toContain("icons/icons: missing bug.svg");
+    expect(errors).toContain("icons/icons: unexpected extra.svg");
+  });
+  it("rejects a manifest that is not 67 icons and 6 glyphs", async () => {
+    const root = await copy();
+    await edit(root, "manifest.json", (text) => {
+      const manifest = JSON.parse(text);
+      manifest.icons.Editor.push("bold");
+      manifest.statusGlyphs.items.pop();
+      return JSON.stringify(manifest);
+    });
+    const errors = (await checkIcons(root)).join("\n");
+    expect(errors).toContain("duplicate icon names");
+    expect(errors).toContain("expected 67 icons");
+    expect(errors).toContain("expected 6 status glyphs");
+  });
+  it("rejects SVG that does not parse", async () => {
+    const root = await copy();
+    await edit(root, "icons/x.svg", (text) => text.replace("</svg>", ""));
+    expect((await checkIcons(root)).join()).toContain(
+      "icons/icons/x.svg: does not parse",
+    );
+  });
+  it.each([
+    ['stroke="currentColor"', 'stroke="#CF222E"'],
+    ['stroke="currentColor"', 'stroke="red"'],
+    ['fill="none"', 'fill="url(#paint)"'],
+    ['fill="none"', 'fill="none" style="stroke: rgb(0, 0, 0)"'],
+    ["<path", "<style>path{fill:red}</style><path"],
+  ])("rejects a hard-coded colour (%s to %s)", async (from, to) => {
+    const root = await copy();
+    await edit(root, "icons/x.svg", (text) => text.replace(from, to));
+    expect((await checkIcons(root)).join()).toMatch(
+      /icons\/icons\/x\.svg: .*(hard-coded colour|not allowed)/,
+    );
+  });
+  it("rejects sprite drift and a second token source", async () => {
+    const root = await copy();
+    await edit(root, "sprite.svg", (text) =>
+      text.replace('id="hb-status-open"', 'id="hb-status-closed"'),
+    );
+    await cp(join(root, "status"), join(root, "tokens"), { recursive: true });
+    const errors = (await checkIcons(root)).join("\n");
+    expect(errors).toContain("icons/sprite.svg: missing hb-status-open");
+    expect(errors).toContain("icons/sprite.svg: unexpected hb-status-closed");
+    expect(errors).toContain("icons/tokens: not part of the pack");
+  });
+  it("rejects a glyph colour token that tokens.css does not define", async () => {
+    const root = await copy();
+    await edit(root, "manifest.json", (text) =>
+      text.replace('"--hb-color-status-fixed"', '"--hb-status-fixed"'),
+    );
+    expect((await checkIcons(root)).join()).toContain(
+      "status fixed names --hb-status-fixed",
+    );
   });
 });
