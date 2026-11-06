@@ -1,0 +1,2 @@
+<!-- Heisenbug status glyph: In progress. Always pair with a text label. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="14" height="14"><circle cx="7" cy="7" r="4.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 2.6 A4.4 4.4 0 0 0 7 11.4 Z" fill="currentColor"/></svg>

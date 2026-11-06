@@ -1,0 +1,167 @@
+{
+  "name": "heisenbug-icons",
+  "version": "1.1.0",
+  "date": "2026-10-31",
+  "source": {
+    "set": "Lucide",
+    "package": "lucide-static",
+    "version": "1.66.0",
+    "licence": "ISC",
+    "licenceFile": "LICENSE-lucide.txt"
+  },
+  "rules": {
+    "grid": 24,
+    "sizes": [16, 20, 24],
+    "renderedStrokePx": 1.5,
+    "strokeViewBoxUnits": {
+      "16": 2.25,
+      "20": 1.8,
+      "24": 1.5
+    },
+    "caps": "round",
+    "joins": "round",
+    "style": "outline only",
+    "color": "currentColor",
+    "iconOnlyButton": {
+      "ariaLabel": "required",
+      "tooltip": "required",
+      "hitAreaPx": {
+        "desktop": 36,
+        "phone": 44
+      }
+    },
+    "decorativeIcons": "aria-hidden",
+    "closedSet": true,
+    "additions": "by Lucide name, in a pull request with the reason"
+  },
+  "icons": {
+    "Navigation": [
+      "house",
+      "compass",
+      "search",
+      "command",
+      "settings",
+      "user",
+      "users",
+      "bell",
+      "inbox",
+      "layout-dashboard",
+      "chart-no-axes-column",
+      "package",
+      "book-open",
+      "shield",
+      "history",
+      "menu",
+      "git-pull-request"
+    ],
+    "Actions": [
+      "plus",
+      "pencil",
+      "send",
+      "copy",
+      "share-2",
+      "link",
+      "external-link",
+      "paperclip",
+      "download",
+      "upload",
+      "trash-2",
+      "log-out",
+      "rotate-cw",
+      "list-filter",
+      "ellipsis",
+      "x",
+      "check"
+    ],
+    "Reporting": [
+      "bug",
+      "eye",
+      "eye-off",
+      "flag",
+      "message-square",
+      "tag",
+      "camera",
+      "smartphone",
+      "keyboard",
+      "corner-down-right"
+    ],
+    "Direction": [
+      "arrow-up",
+      "arrow-down",
+      "arrow-left",
+      "chevron-down",
+      "chevron-up",
+      "chevron-left",
+      "chevron-right"
+    ],
+    "Messages": [
+      "triangle-alert",
+      "circle-alert",
+      "info",
+      "circle-help",
+      "lock",
+      "globe",
+      "loader-circle",
+      "image"
+    ],
+    "Editor": [
+      "bold",
+      "italic",
+      "strikethrough",
+      "code",
+      "square-code",
+      "list",
+      "list-ordered",
+      "text-quote"
+    ]
+  },
+  "count": 67,
+  "statusGlyphs": {
+    "rule": "Exactly six shapes. Shape carries the meaning, colour supports it. Always pair with a text label nearby. Drawn on a 14 px grid, rendered at 14, 16 or 20 px. Not Lucide, not a brand mark.",
+    "items": [
+      {
+        "id": "open",
+        "label": "Open",
+        "meaning": "An open bug",
+        "shape": "Filled disc",
+        "colourToken": "--hb-color-status-open"
+      },
+      {
+        "id": "in-progress",
+        "label": "In progress",
+        "meaning": "A fix is being worked on",
+        "shape": "Ring with the left half filled",
+        "colourToken": "--hb-color-status-in-progress"
+      },
+      {
+        "id": "fixed",
+        "label": "Fixed",
+        "meaning": "Fixed in a release",
+        "shape": "Ring with a check mark",
+        "colourToken": "--hb-color-status-fixed"
+      },
+      {
+        "id": "duplicate",
+        "label": "Duplicate",
+        "meaning": "Merged into another issue",
+        "shape": "Ring with a slash",
+        "colourToken": "--hb-color-status-neutral"
+      },
+      {
+        "id": "not-planned",
+        "label": "Not planned",
+        "meaning": "Closed: maintainers will not work on it",
+        "shape": "Ring with a level bar",
+        "colourToken": "--hb-color-status-neutral"
+      },
+      {
+        "id": "pending",
+        "label": "Waiting",
+        "meaning": "Waiting on someone, for example reporters to confirm a fix",
+        "shape": "Dashed ring",
+        "colourToken": "--hb-color-status-neutral"
+      }
+    ]
+  },
+  "notIcons": ["The brand mark", "Status glyphs", "Emoji", "Flags"]
+}

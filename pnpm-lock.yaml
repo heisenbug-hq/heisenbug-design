@@ -169,6 +169,9 @@ importers:
       '@google/design.md':
         specifier: 0.4.0
         version: 0.4.0
+      '@xmldom/xmldom':
+        specifier: 0.9.12
+        version: 0.9.12
       prettier:
         specifier: 3.9.10
         version: 3.9.10
@@ -341,6 +344,10 @@ packages:
 
   '@vitest/spy@5.1.0':
     resolution: {integrity: sha512-2DPO5OMHWKrBngC+fCmTQqemNF0gidRhp3lxbBmRhW+M1XJrfgPpqNqWVevXtn2f2ufD5ZaR1B6B641aAlcX5A==}
+
+  '@xmldom/xmldom@0.9.12':
+    resolution: {integrity: sha512-5AXjrcMClTryPe9LgZrygpB1lj7s0S9E0+W+AHaVKAVyHanafK86iPSvG5xHVSp/jC+VH1UXu0TAEmY279xH7A==}
+    engines: {node: '>=14.6'}
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -977,6 +984,8 @@ snapshots:
       vite: 8.3.5(yaml@2.9.1)
 
   '@vitest/spy@5.1.0': {}
+
+  '@xmldom/xmldom@0.9.12': {}
 
   acorn-jsx@5.3.2(acorn@8.19.0):
     dependencies:
