@@ -1,0 +1,60 @@
+name: Publish
+
+# Stages the release on npm through trusted publishing (OIDC). Nothing goes live until the owner
+# approves the staged version on npm with two-factor authentication. See docs/publishing.md.
+on:
+  push:
+    tags: ["v*"]
+  # Fallback if a release tag did not start this workflow: run it with the tag as the ref.
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Require a release tag
+        env:
+          REF: ${{ github.ref }}
+        run: |
+          case "$REF" in
+            refs/tags/v*) ;;
+            *)
+              echo "::error title=Not a release tag::Publish runs only on a v* tag, not $REF. Nothing was staged."
+              exit 1
+              ;;
+          esac
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref }}
+          persist-credentials: false
+      - name: Check the tag matches package.json
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          if [ "$TAG" != "v$version" ]; then
+            echo "::error title=Tag and version differ::Tag $TAG does not match package.json version $version (expected v$version). Nothing was staged."
+            exit 1
+          fi
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      # No dependency cache: a release build starts from the lockfile only.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - name: Install the npm CLI (staged publishing needs 11.15.0 or later)
+        run: |
+          npm install --global npm@11.21.1
+          npm --version
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - name: Stage the release on npm
+        run: npm stage publish
