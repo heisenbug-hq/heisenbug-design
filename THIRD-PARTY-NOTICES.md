@@ -1,6 +1,6 @@
 # Third-party notices
 
-Heisenbug Design bundles or will bundle the third-party works below. The full license text of each is placed next to the files it covers; an entry marked as a notice to complete is not bundled yet.
+Heisenbug Design bundles the third-party works below. The full license text of each is placed next to the files it covers.
 
 ## Lucide icons
 
@@ -19,12 +19,16 @@ Heisenbug Design bundles or will bundle the third-party works below. The full li
 
 ## Geist
 
-- Source: https://vercel.com/font
+- Source: https://vercel.com/font (files from `@fontsource/geist` 5.3.0)
 - License: SIL Open Font License 1.1
-- Status: notice to complete when the files are added: add the full OFL 1.1 text and the font copyright line with the font files.
+- Version: weights 400 and 600, subsets `latin` and `latin-ext`, normal style, woff2, in `fonts/`
+- Status: complete. The full OFL 1.1 text is in `fonts/OFL-geist.txt`, next to the files.
+- Copyright 2024 The Geist Project Authors (https://github.com/vercel/geist-font)
 
 ## Spline Sans Mono
 
-- Source: https://fonts.google.com/specimen/Spline+Sans+Mono
+- Source: https://fonts.google.com/specimen/Spline+Sans+Mono (files from `@fontsource/spline-sans-mono` 5.3.0)
 - License: SIL Open Font License 1.1
-- Status: notice to complete when the files are added: add the full OFL 1.1 text and the font copyright line with the font files.
+- Version: weights 400 and 500, subsets `latin` and `latin-ext`, normal style, woff2, in `fonts/`
+- Status: complete. The full OFL 1.1 text is in `fonts/OFL-spline-sans-mono.txt`, next to the files.
+- Copyright 2022 The Spline Sans Mono Project Authors (https://github.com/SorkinType/SplineSansMono)

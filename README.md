@@ -9,7 +9,9 @@ Heisenbug is a public place to report bugs, confirm them on your own device and 
 
 **Status:** pre-release. `@heisenbughq/design` builds theme CSS and Tailwind v4 mappings from the front matter in `DESIGN.md`, checks contrast and document drift, ships the icon pack, and ships document sync and check commands for consumers.
 
-Use Node 26.13.0 and pnpm 12.16.1. Run `pnpm install --frozen-lockfile`, then `pnpm check`. `pnpm build` writes `dist/tokens.css` and `dist/theme.css`; load both for Tailwind v4, or just `tokens.css` for plain CSS. Set `data-theme="dark"` or `data-theme="light"` on the root element. Fonts use system fallbacks until the font files are added.
+Use Node 26.13.0 and pnpm 12.16.1. Run `pnpm install --frozen-lockfile`, then `pnpm check`. `pnpm build` writes `dist/tokens.css` and `dist/theme.css`; load both for Tailwind v4, or just `tokens.css` for plain CSS. Set `data-theme="dark"` or `data-theme="light"` on the root element. `tokens.css` only names fonts, with system fallbacks, and never loads them.
+
+Fonts: Geist (400, 600) and Spline Sans Mono (400, 500) ship as self-hosted woff2 files in `fonts/` (latin and latin-ext, OFL 1.1). Import `@heisenbughq/design/fonts.css` once in the app and the docs site; its `url()` paths are relative, so bundlers resolve the files from the package and nothing loads from a third-party host. Never import `fonts.css` in an SDK or the reporter: they inherit the host font. `pnpm fonts` refreshes `fonts/` from the pinned Fontsource packages; `pnpm check` fails if the committed files differ.
 
 `pnpm contrast` prints every required ratio in both themes. `pnpm lint:design` runs Google's design linter pinned at 0.4.0. `pnpm drift` checks the Colors table against the token source. `pnpm guards` checks tracked text and SVG locations; these rules duplicate `platform/tools/guards` for now. `pnpm icons` checks that the icon pack matches its manifest (67 icons, 6 status glyphs), that every SVG parses, and that no SVG hard-codes a colour.
 
@@ -22,6 +24,7 @@ Consumers can wire `design:sync` to `heisenbug-design-sync` and `design:check` t
 - `DESIGN.md`: short, agent-facing design rules and tokens
 - `docs/ui-standards.md`: the full UI standards
 - `icons/`: the icon pack (Lucide v1.66.0, 67 icons) and the six status glyphs, with `manifest.json`
+- `fonts/`: the self-hosted font files, their OFL texts and the manifest behind `dist/fonts.css`
 - `docs/publishing.md`: how releases are staged on npm and approved
 - `brand/BRAND.md`: logo, wordmark, colours, tagline, Powered by, trademark notes
 - `brand/svg`, `brand/png`, `brand/favicon`: the brand pack (v1)
