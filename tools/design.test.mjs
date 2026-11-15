@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { readFile, mkdtemp, rm, writeFile, cp } from "node:fs/promises";
+import { readFile, mkdtemp, rm, writeFile, cp, access } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,6 +9,8 @@ import { contrast, checkPairs } from "./contrast.mjs";
 import { checkDrift } from "./drift.mjs";
 import { inspect } from "./guards.mjs";
 import { marker } from "../bin/documents.mjs";
+import { renderFontCss } from "./fontcss.mjs";
+import { drift as fontDrift } from "./fonts.mjs";
 import { checkIcons, ICON_COUNT, GLYPH_COUNT } from "./icons.mjs";
 const source = await readFile(new URL("../DESIGN.md", import.meta.url), "utf8");
 const tokens = frontMatter(source);
@@ -247,5 +249,40 @@ describe("icon pack", () => {
     expect((await checkIcons(root)).join()).toContain(
       "status fixed names --hb-status-fixed",
     );
+  });
+});
+
+describe("fonts", () => {
+  const manifestUrl = new URL("../fonts/manifest.json", import.meta.url);
+  it("builds fonts.css with eight swap faces and resolvable files", async () => {
+    const manifest = JSON.parse(await readFile(manifestUrl, "utf8"));
+    const css = renderFontCss(manifest);
+    const faces = css.match(/@font-face \{[^}]+\}/g);
+    expect(faces).toHaveLength(8);
+    for (const face of faces) {
+      expect(face).toContain("font-display: swap;");
+      expect(face).toMatch(/unicode-range: U\+/);
+    }
+    expect(new Set(manifest.map((m) => m.family))).toEqual(
+      new Set(["Geist", "Spline Sans Mono"]),
+    );
+    const dist = new URL("../dist/", import.meta.url);
+    const built = await readFile(new URL("fonts.css", dist), "utf8");
+    expect(built).toBe(css);
+    const urls = [...built.matchAll(/url\("([^"]+)"\)/g)].map((m) => m[1]);
+    expect(urls).toHaveLength(8);
+    for (const url of urls)
+      await access(new URL(url, new URL("fonts.css", dist)));
+  });
+  it("keeps tokens.css free of font loading", async () => {
+    const tokensCss = await readFile(
+      new URL("../dist/tokens.css", import.meta.url),
+      "utf8",
+    );
+    expect(tokensCss).not.toContain("@font-face");
+    expect(tokensCss).not.toContain("url(");
+  });
+  it("matches what the copy script would produce", async () => {
+    expect(await fontDrift()).toEqual([]);
   });
 });
