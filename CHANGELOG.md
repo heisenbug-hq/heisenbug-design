@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/heisenbug-hq/heisenbug-design/compare/v0.2.0...v0.3.0) (2026-11-16)
+
+
+### Features
+
+* let the sprite take its stroke from the consumer and ship the app brand files ([#9](https://github.com/heisenbug-hq/heisenbug-design/issues/9)) ([60d241a](https://github.com/heisenbug-hq/heisenbug-design/commit/60d241a11b99dab06eab502c74a03dc12201fb15))
+
 ## [0.2.0](https://github.com/heisenbug-hq/heisenbug-design/compare/v0.1.0...v0.2.0) (2026-11-15)
 
 
