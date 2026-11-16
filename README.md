@@ -17,6 +17,10 @@ Fonts: Geist (400, 600) and Spline Sans Mono (400, 500) ship as self-hosted woff
 
 Icons: import `@heisenbughq/design/icons/<name>.svg`, `@heisenbughq/design/status/status-<id>.svg`, `@heisenbughq/design/icons/sprite.svg` or `@heisenbughq/design/icons/manifest.json`; `@heisenbughq/design/icons/icon.mjs` renders an icon at 16, 20 or 24 px from Node. Every SVG uses `currentColor`; colour status glyphs with the `--hb-color-status-*` variables from `tokens.css`.
 
+Sprite stroke: icon symbols in `sprite.svg` set no `stroke-width`, so they take it from the wrapping `<svg>`. Set `stroke-width` on that element to 2.25, 1.8 or 1.5 for 16, 20 or 24 px (a 1.5 px stroke at every size). The six status symbols keep their own stroke. `pnpm sprite` regenerates `sprite.svg` from `icons/icons/` and `icons/status/`.
+
+Brand files for apps: the package ships the dark and light lockups and marks (`@heisenbughq/design/brand/svg/heisenbug-lockup-dark.svg` and the like), everything in `brand/favicon/`, and `BRAND-USE.md`. Nothing else from `brand/` is included.
+
 Consumers can wire `design:sync` to `heisenbug-design-sync` and `design:check` to `heisenbug-design-check`. Run the former from the consumer root to refresh committed `DESIGN.md` and `docs/ui-standards.md` copies with their source marker; the latter fails when either copy drifts. Consumer adoption follows later. Releases are staged on npm by CI and approved by the owner: see `docs/publishing.md`.
 
 ## Contents
@@ -32,4 +36,4 @@ Consumers can wire `design:sync` to `heisenbug-design-sync` and `design:check` t
 
 ## License
 
-Code and tokens are MIT (`LICENSE`). Files in `brand/` are not licensed for reuse (see `BRAND-USE.md`). Third-party notices: `THIRD-PARTY-NOTICES.md`.
+Code and tokens are MIT (`LICENSE`). The brand files in the package (the lockups, marks and favicons from `brand/`) are not covered by the MIT licence and follow `BRAND-USE.md`, which ships with them. Third-party notices: `THIRD-PARTY-NOTICES.md`.

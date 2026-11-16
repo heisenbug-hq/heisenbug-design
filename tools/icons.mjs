@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { DOMParser } from "@xmldom/xmldom";
 import { readTokens, render } from "./tokens.mjs";
+import { buildSprite } from "./sprite.mjs";
 
 // The set is closed (AGENTS.md): changing either number is a design change.
 export const ICON_COUNT = 67;
@@ -87,6 +88,46 @@ function compare(label, expected, actual, errors) {
     if (!want.has(name)) errors.push(`${label}: unexpected ${name}`);
 }
 
+// Icon symbols take their stroke width from the consumer's <svg>; status
+// symbols draw their own, exactly as their standalone files do.
+async function spriteStrokeErrors(root, document, glyphs) {
+  const errors = [];
+  const strokes = (element) => {
+    const found = [];
+    const visit = (node) => {
+      if (node.nodeType !== 1) return;
+      if (node.hasAttribute("stroke-width"))
+        found.push(node.getAttribute("stroke-width"));
+      for (const child of Array.from(node.childNodes)) visit(child);
+    };
+    visit(element);
+    return found.sort().join(",");
+  };
+  const status = new Map(
+    glyphs.map((glyph) => [`hb-status-${glyph.id}`, glyph.id]),
+  );
+  for (const symbol of Array.from(document.getElementsByTagName("symbol"))) {
+    const id = symbol.getAttribute("id");
+    if (!status.has(id)) {
+      if (strokes(symbol))
+        errors.push(
+          `icons/sprite.svg: ${id} sets stroke-width (the consumer sets it on its <svg>)`,
+        );
+      continue;
+    }
+    const own = await readFile(
+      join(root, "status", `status-${status.get(id)}.svg`),
+      "utf8",
+    ).then(
+      (text) => strokes(parseSvg(text).documentElement),
+      () => null,
+    );
+    if (own !== null && strokes(symbol) !== own)
+      errors.push(`icons/sprite.svg: ${id} lost its own stroke`);
+  }
+  return errors;
+}
+
 export async function checkIcons(
   root = fileURLToPath(new URL("../icons/", import.meta.url)),
   tokensCss,
@@ -152,7 +193,8 @@ export async function checkIcons(
       continue;
     }
     errors.push(...colourErrors(path, document));
-    if (file === "sprite.svg")
+    if (file === "sprite.svg") {
+      errors.push(...(await spriteStrokeErrors(root, document, glyphs)));
       compare(
         "icons/sprite.svg",
         [
@@ -164,6 +206,15 @@ export async function checkIcons(
         ),
         errors,
       );
+      const built = await buildSprite(root).catch(() => null);
+      if (
+        built !== null &&
+        built !== (await readFile(join(root, file), "utf8"))
+      )
+        errors.push(
+          "icons/sprite.svg: out of date, run pnpm sprite to regenerate it",
+        );
+    }
   }
   return errors;
 }
@@ -180,7 +231,7 @@ if (import.meta.main) {
       process.exitCode = 1;
     } else
       console.log(
-        `Icon pack matches its manifest (${ICON_COUNT} icons, ${GLYPH_COUNT} status glyphs); every SVG parses and uses currentColor only`,
+        `Icon pack matches its manifest (${ICON_COUNT} icons, ${GLYPH_COUNT} status glyphs); every SVG parses and uses currentColor only; sprite icons set no stroke-width and match the generator`,
       );
   }
 }

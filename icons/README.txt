@@ -20,6 +20,8 @@ The rules
   1. One set: Lucide, pinned at v1.66.0. No other icon sets, no hand-drawn icons.
   2. Render at 16, 20 or 24 px only. Stroke is 1.5 rendered px at every size, so the stroke-width
      attribute in the viewBox is 1.5 * 24 / size (2.25, 1.8, 1.5). The SVG files in icons/ are at 24 px.
+     With sprite.svg the icon symbols carry no stroke-width: set stroke-width on the wrapping <svg>
+     to 2.25, 1.8 or 1.5 for 16, 20 or 24 px. The status symbols keep their own stroke.
   3. Outline only, round caps and joins, currentColor, neutral text colours. Red is reserved for the open-bug dot.
   4. Text label next to the icon by default. Icon-only buttons need an aria-label and a tooltip, and a
      36 px (desktop) or 44 px (phone) hit area. Decorative icons are aria-hidden.

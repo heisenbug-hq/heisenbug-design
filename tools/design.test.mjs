@@ -241,6 +241,29 @@ describe("icon pack", () => {
     expect(errors).toContain("icons/sprite.svg: unexpected hb-status-closed");
     expect(errors).toContain("icons/tokens: not part of the pack");
   });
+  it("rejects a stroke-width on an icon symbol and a lost status stroke", async () => {
+    const root = await copy();
+    await edit(root, "sprite.svg", (text) =>
+      text
+        .replace(
+          'id="hb-house" viewBox="0 0 24 24"',
+          'id="hb-house" stroke-width="1.5" viewBox="0 0 24 24"',
+        )
+        .replace(/(id="hb-status-fixed"[^]*?)stroke-width="1.6"/, "$1"),
+    );
+    const errors = (await checkIcons(root)).join("\n");
+    expect(errors).toContain("hb-house sets stroke-width");
+    expect(errors).toContain("hb-status-fixed lost its own stroke");
+  });
+  it("rejects a sprite that differs from the generator", async () => {
+    const root = await copy();
+    await edit(root, "sprite.svg", (text) =>
+      text.replace('<path d="m21 21', '<path d="m21 22'),
+    );
+    expect((await checkIcons(root)).join()).toContain(
+      "sprite.svg: out of date",
+    );
+  });
   it("rejects a glyph colour token that tokens.css does not define", async () => {
     const root = await copy();
     await edit(root, "manifest.json", (text) =>
@@ -250,6 +273,35 @@ describe("icon pack", () => {
       "status fixed names --hb-status-fixed",
     );
   });
+});
+
+describe("package contents", () => {
+  it("ships exactly the app brand files, with BRAND-USE.md alongside", () => {
+    const run = spawnSync("pnpm", ["pack", "--dry-run", "--json"], {
+      cwd: fileURLToPath(new URL("..", import.meta.url)),
+      encoding: "utf8",
+    });
+    expect(run.status).toBe(0);
+    const out = run.stdout;
+    const { files } = JSON.parse(out.slice(out.indexOf("{")));
+    const paths = files.map((file) => file.path);
+    const brand = paths.filter((path) => path.startsWith("brand/")).sort();
+    expect(brand).toEqual([
+      "brand/favicon/apple-touch-icon.png",
+      "brand/favicon/favicon-16.png",
+      "brand/favicon/favicon-32.png",
+      "brand/favicon/favicon-48.png",
+      "brand/favicon/favicon-tile.svg",
+      "brand/favicon/favicon.ico",
+      "brand/favicon/favicon.svg",
+      "brand/svg/heisenbug-lockup-dark.svg",
+      "brand/svg/heisenbug-lockup-light.svg",
+      "brand/svg/heisenbug-mark-dark.svg",
+      "brand/svg/heisenbug-mark-light.svg",
+    ]);
+    expect(paths).toContain("BRAND-USE.md");
+    expect(paths.filter((path) => path.startsWith("boards/"))).toEqual([]);
+  }, 60000);
 });
 
 describe("fonts", () => {
